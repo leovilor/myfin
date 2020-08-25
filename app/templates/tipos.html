@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block page_content %}
+
+<div class="page-header">
+    <h1>Tipos de Contas</h1>
+</div>
+
+<div class="col-md-4">
+	<form method="POST" action="">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.nome.label(class="form-control-label") }}
+            {{ form.nome(class="form-control form-control-lg") }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+<div class="col-md-8">
+    {% if count == 0 %}
+        <div class="alert alert-primary" role="alert">
+            Não há registros no banco de dados!
+        </div>
+    {% else %}
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Acões</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tipo in tipos %}
+                    <tr>
+                        <th><a href="/lista_tipo/{{ tipo.id }}">{{tipo.nome}}</a></th>
+                        <th>
+                            <a href="/tipos/{{ tipo.id }}">editar | </a>
+                            <a href="/tipo/{{ tipo.id }}">deletar</a>
+                        </th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if pagination %}
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination, '.tipos') }}
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block page_content %}
+
+<div class="page-header">
+    <h1>Contas</h1>
+</div>
+
+<div class="col-md-4">
+	<form method="POST" action="">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.nome.label(class="form-control-label") }}
+            {{ form.nome(class="form-control form-control-lg") }}
+        </div>
+        <div class="form-group">
+            {{ form.tipo.label(class="form-control-label") }}
+            {{ form.tipo(class="form-control form-control-lg") }}
+        </div>
+        <div class="form-group">
+            {{ form.saldo.label(class="form-control-label") }}
+            {{ form.saldo(class="form-control form-control-lg") }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+<div class="col-md-8">
+    {% if count == 0 %}
+        <div class="alert alert-primary" role="alert">
+            Não há registros no banco de dados!
+        </div>
+    {% else %}
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Conta</th>
+                    <th>Tipo</th>
+                    <th>Saldo</th>
+                    <th>Acões</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for conta in contas %}
+                    <tr>
+                        <th>{{ conta.nome }}</th>
+                        <th><a href="/lista_tipo/{{ conta.tipoconta.id }}">{{conta.tipoconta.nome}}</a></th>
+                        
+                        {% if (conta.saldo|teste_currency) < 0 %}
+                            <th class="neg">{{ conta.saldo|format_currency }}</th>
+                        {% else %}
+                            <th class="pos">{{ conta.saldo|format_currency }}</th>
+                        {% endif %}
+                        <th>
+                            <a href="/contas/{{ conta.id }}"><img src="{{ url_for('static', filename='img/icn_ed.png') }}"/> </a>
+                            <a href="/conta/{{ conta.id }}"> <img src="{{ url_for('static', filename='img/icn_del.png') }}"/></a>
+                        </th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if pagination %}
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination, '.contas') }}
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

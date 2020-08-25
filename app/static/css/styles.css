@@ -1,0 +1,27 @@
+.profile-thumbnail {
+    position: absolute;
+}
+.profile-header {
+    min-height: 260px;
+    margin-left: 280px;
+}
+
+thead {
+    background-color:#d3cccc;
+}
+
+tbody {
+    border-bottom: 1px solid #d3cccc;
+}
+
+.pagination {
+    float: right;
+}
+
+.neg{
+	color:red;
+}
+
+.pos{
+	color:#337ab7;
+}

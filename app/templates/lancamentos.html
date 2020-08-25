@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block page_content %}
+
+<div class="page-header">
+    <h1>Lançamentos</h1>
+</div>
+
+<div class="col-md-4">
+	<form method="POST" action="">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.descricao.label(class="form-control-label") }}
+            {{ form.descricao(class="form-control form-control-lg") }}
+        </div>
+        <div class="form-group">
+            {{ form.data_lanc.label(class="form-control-label") }}
+            {{ form.data_lanc(class="form-control form-control-lg") }}
+        </div>
+        <div class="form-group">
+            {{ form.valor.label(class="form-control-label") }}
+            {{ form.valor(class="form-control form-control-lg") }}
+        </div>
+        <div class="form-group">
+            {{ form.conta_deb.label(class="form-control-label") }}
+            {{ form.conta_deb(class="form-control form-control-lg") }}
+        </div>
+        <div class="form-group">
+            {{ form.conta_cre.label(class="form-control-label") }}
+            {{ form.conta_cre(class="form-control form-control-lg") }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+</div>
+<div class="col-md-8">
+    {% if count == 0 %}
+        <div class="alert alert-primary" role="alert">
+            Não há registros no banco de dados!
+        </div>
+    {% else %}
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Acões</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lancamento in lancamentos %}
+                    <tr>
+                        <th>{{lancamento.data_lanc|format_datetime}}</th>
+                        <th>{{lancamento.descricao}}</th>
+                        <th>{{ lancamento.valor|format_currency }}</th>
+                        <th>
+                            <a href="/lancamentos/{{ lancamento.id }}"><img src="{{ url_for('static', filename='img/icn_ed.png') }}"/> </a>
+                            <a href="/lancamento/{{ lancamento.id }}"> <img src="{{ url_for('static', filename='img/icn_del.png') }}"/></a>
+                        </th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p></p>
+        
+    {% endif %}
+
+    {% if pagination %}
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination, '.lancamentos') }}
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
